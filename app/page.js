@@ -33,7 +33,7 @@ export default function Home() {
   const [newItem, setNewItem] = useState({name: '', price: '', quantity: '', imageURL: ''});
   const [openState, setOpen] = useState(false);
   const [itemBeingEdited, setItemBeingEdited] = useState({name: '', price: '', quantity: '', imageURL: '', id: ''})
-  const storage = getStorage();
+  
 
   const fileInputAddRef = useRef(null);
   const fileInputEditRef = useRef(null);
@@ -145,6 +145,7 @@ export default function Home() {
   }
   const editItem = async (e) => {
     e.preventDefault();
+    const storage = getStorage();
     let currImage = itemBeingEdited.imageURL; // Use the existing imageURL from state
     if (imageBeingEdited) {
       if (currImage) {
@@ -175,6 +176,7 @@ export default function Home() {
    */
   const deleteItem = async (id) => {
     const itemBeingDeleted = getDoc(doc(db, 'inventory', id));
+    const storage = getStorage();
     const deletedImage = ref(storage, `images/${(await itemBeingDeleted).data().name}`);
 
     // Delete the image and document from Firebase

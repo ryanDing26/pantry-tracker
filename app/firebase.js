@@ -18,9 +18,17 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+let app;
+let analytics;
+let db;
+let storage;
+
+if (typeof window !== 'undefined') {
+  // This code runs only in the browser
+  app = initializeApp(firebaseConfig);
+  analytics = getAnalytics(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
+}
+
 export { db, storage };
