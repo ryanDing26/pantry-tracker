@@ -21,8 +21,6 @@ import {
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { OpenAI } from 'openai';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 export default function Home() {
   // React hooks
@@ -36,7 +34,22 @@ export default function Home() {
   const [openState, setOpen] = useState(false);
   const [itemBeingEdited, setItemBeingEdited] = useState({name: '', price: '', quantity: '', imageURL: '', id: ''})
   const storage = getStorage();
-  
+
+  const fileInputAddRef = useRef(null);
+  const fileInputEditRef = useRef(null);
+
+  // Handler to trigger file input click
+  const handleAddClick = () => {
+    if (fileInputAddRef.current) {
+      fileInputAddRef.current.click();
+    }
+  };
+
+  const handleEditClick = () => {
+    if (fileInputEditRef.current) {
+      fileInputEditRef.current.click();
+    }
+  };
   /**
    * Fetch items from db everytime a new snapshot of the page is created (i.e. on page changes).
    */ 
@@ -217,9 +230,9 @@ export default function Home() {
           </Box>
           <Box display={'flex'}>
             <Tooltip sx={{ width: '50%' }} title='Upload Item Image Here'>
-              <Button onClick={() => document.getElementById('fileInputEdit').click()} startIcon={<AddPhotoAlternateIcon fontSize='large'/>}>
+              <Button onClick={handleEditClick} startIcon={<AddPhotoAlternateIcon fontSize='large'/>}>
                 {imageBeingEdited ? 'Image Uploaded!' : ''}
-                <Input id='fileInputEdit' inputRef={image} onChange={handleImageEdit} type='file' accept='image/*' sx={{ display: 'none' }}></Input>
+                <Input id='fileInputEdit' inputRef={fileInputEditRef} onChange={handleImageEdit} type='file' accept='image/*' sx={{ display: 'none' }}></Input>
               </Button>
             </Tooltip>
             <Button sx={{ width: '50%' }} onClick={editItem}>
@@ -312,9 +325,9 @@ export default function Home() {
                 </Box>
                 <Box display={'flex'}>
                   <Tooltip sx={{ width: '50%' }}title='Upload Image of Item Here'>
-                    <Button onClick={() => document.getElementById('fileInputAdd').click()} startIcon={<AddPhotoAlternateIcon fontSize='large'/>}>
+                    <Button onClick={handleAddClick} startIcon={<AddPhotoAlternateIcon fontSize='large'/>}>
                       {image ? 'Image Uploaded!' : ''}
-                      <Input id='fileInputAdd' inputRef={image} onChange={handleImageUpload} type='file' accept='image/*' sx={{ display: 'none' }}></Input>
+                      <Input id='fileInputAdd' inputRef={fileInputAddRef} onChange={handleImageUpload} type='file' accept='image/*' sx={{ display: 'none' }}></Input>
                     </Button>
                   </Tooltip>
                   <Button sx={{ width: '50%' }} onClick={addItem}>
